@@ -13,6 +13,7 @@ function isBlank (node) {
     !isVoid(node) &&
     !isMeaningfulWhenBlank(node) &&
     /^\s*$/i.test(node.textContent) &&
+    !note.textContent?.startsWith('\u2003') && // added by wizweishijun, for markdown safe space char
     !hasVoid(node) &&
     !hasMeaningfulWhenBlank(node)
   )
