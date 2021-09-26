@@ -52,46 +52,6 @@ export default function TurndownService (options) {
 
 const MARKDOWN_SAFE_SPACE = '\u2003'
 
-function replaceLeadSpaceToMarkdownSafeSpace (text) {
-  let count = 0
-  for (let i = 0; i < text.length; i += 1) {
-    if (text[i] === ' ') {
-      count += 1
-    } else {
-      break
-    }
-  }
-  //
-  if (count === 0) {
-    return text
-  }
-  //
-  const newSpace = (new Array(count)).fill(MARKDOWN_SAFE_SPACE).join('')
-  //
-  return newSpace + text.substr(count)
-}
-
-function replaceSpaceToMarkdownSafeSpace (node) {
-  //
-  if (node.nodeType === 3) {
-    const textContent = node.textContent
-    if (textContent && textContent.startsWith(' ')) {
-      // eslint-disable-next-line no-param-reassign
-      node.textContent = replaceLeadSpaceToMarkdownSafeSpace(textContent)
-    }
-    return
-  }
-  //
-  if (node.nodeType === 1) {
-    //
-    if (node.tagName === 'PRE' || node.tagName === 'CODE') {
-      return
-    }
-    //
-    node.childNodes.forEach(replaceSpaceToMarkdownSafeSpace)
-  }
-}
-
 function createMarkdownSafeTrim (old) {
   return function markdownSafeTrim () {
     if (this.startsWith(MARKDOWN_SAFE_SPACE)) {
