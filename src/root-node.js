@@ -16,6 +16,9 @@ export default function RootNode (input, options) {
   } else {
     root = input.cloneNode(true)
   }
+  // added by wizweishijun
+  replaceSpaceToMarkdownSafeSpace(root)
+  //
   collapseWhitespace({
     element: root,
     isBlock: isBlock,

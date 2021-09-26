@@ -140,7 +140,6 @@ TurndownService.prototype = {
     var ret = ''
     replaceTrimForMarkdownSafeSpace(() => {
       const node = new RootNode(input, this.options)
-      replaceSpaceToMarkdownSafeSpace(node)
       var output = process.call(this, node)
       ret = postProcess.call(this, output)
       // replace middle space char to white space
@@ -283,6 +282,11 @@ function replacementForNode (node) {
   //
   if (whitespace.leading) {
     content = content.replace(/^\u2003+/g, '') // added by wizweishijun
+  } else if (content.startsWith('\u2003')) {
+    return (
+      rule.replacement(content, node, this.options) +
+      whitespace.trailing
+    )
   }
   //
   return (
