@@ -1,5 +1,5 @@
 {
-  "name": "turndown",
+  "name": "@wizteam/turndown",
   "description": "A library that converts HTML to Markdown",
   "version": "7.1.1",
   "author": "Dom Christie",
