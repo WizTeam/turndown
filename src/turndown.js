@@ -202,6 +202,15 @@ function replacementForNode (node) {
   var content = process.call(this, node)
   var whitespace = node.flankingWhitespace
   if (whitespace.leading || whitespace.trailing) content = content.trim()
+  //
+  // added by wizweishijun, avoid add extra white space
+  if (content.startsWith('\u2003')) {
+    return (
+      rule.replacement(content, node, this.options) +
+      whitespace.trailing
+    )
+  }
+  //
   return (
     whitespace.leading +
     rule.replacement(content, node, this.options) +
