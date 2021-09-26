@@ -82,7 +82,7 @@ function replaceSpaceToMarkdownSafeSpace (node) {
     return
   }
   //
-  if (node.nodeType === 3) {
+  if (node.nodeType === 1) {
     //
     if (node.tagName === 'PRE' || node.tagName === 'CODE') {
       return
@@ -281,12 +281,8 @@ function replacementForNode (node) {
   var whitespace = node.flankingWhitespace
   if (whitespace.leading || whitespace.trailing) content = content.trim()
   //
-  // added by wizweishijun, avoid add extra white space
-  if (content.startsWith('\u2003')) {
-    return (
-      rule.replacement(content, node, this.options) +
-      whitespace.trailing
-    )
+  if (whitespace.leading) {
+    content = content.replace(/^\u2003+/g, '') // added by wizweishijun
   }
   //
   return (
