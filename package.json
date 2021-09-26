@@ -1,7 +1,7 @@
 {
   "name": "@wizteam/turndown",
   "description": "A library that converts HTML to Markdown",
-  "version": "7.1.1",
+  "version": "7.1.2",
   "author": "Dom Christie",
   "main": "lib/turndown.cjs.js",
   "module": "lib/turndown.es.js",
@@ -25,6 +25,7 @@
     "turndown-attendant": "0.0.3"
   },
   "files": [
+    "index.d.ts",
     "lib",
     "dist"
   ],
