@@ -50,6 +50,75 @@ export default function TurndownService (options) {
   this.rules = new Rules(this.options)
 }
 
+const MARKDOWN_SAFE_SPACE = '\u2003'
+
+function replaceLeadSpaceToMarkdownSafeSpace (text) {
+  let count = 0
+  for (let i = 0; i < text.length; i += 1) {
+    if (text[i] === ' ') {
+      count += 1
+    } else {
+      break
+    }
+  }
+  //
+  if (count === 0) {
+    return text
+  }
+  //
+  const newSpace = (new Array(count)).fill(MARKDOWN_SAFE_SPACE).join('')
+  //
+  return newSpace + text.substr(count)
+}
+
+function replaceSpaceToMarkdownSafeSpace (node) {
+  //
+  if (node.nodeType === 3) {
+    const textContent = node.textContent
+    if (textContent && textContent.startsWith(' ')) {
+      // eslint-disable-next-line no-param-reassign
+      node.textContent = replaceLeadSpaceToMarkdownSafeSpace(textContent)
+    }
+    return
+  }
+  //
+  if (node.nodeType === 3) {
+    //
+    if (node.tagName === 'PRE' || node.tagName === 'CODE') {
+      return
+    }
+    //
+    node.childNodes.forEach(replaceSpaceToMarkdownSafeSpace)
+  }
+}
+
+function createMarkdownSafeTrim (old) {
+  return function markdownSafeTrim () {
+    if (this.startsWith(MARKDOWN_SAFE_SPACE)) {
+      if (this.endsWith(MARKDOWN_SAFE_SPACE)) {
+        return this
+      }
+      return this.trimRight()
+    }
+    return old.apply(this)
+  }
+}
+
+function replaceTrimForMarkdownSafeSpace (callback) {
+  //
+  const old = String.prototype.trim
+  try {
+    //
+    // eslint-disable-next-line no-extend-native
+    String.prototype.trim = createMarkdownSafeTrim(old)
+    callback()
+    //
+  } finally {
+    // eslint-disable-next-line no-extend-native
+    String.prototype.trim = old
+  }
+}
+
 TurndownService.prototype = {
   /**
    * The entry point for converting a string or DOM node to Markdown
@@ -68,8 +137,15 @@ TurndownService.prototype = {
 
     if (input === '') return ''
 
-    var output = process.call(this, new RootNode(input, this.options))
-    return postProcess.call(this, output)
+    var ret = ''
+    replaceTrimForMarkdownSafeSpace(() => {
+      const node = new RootNode(input, this.options)
+      replaceSpaceToMarkdownSafeSpace(node)
+      var output = process.call(this, node)
+      ret = postProcess.call(this, output)
+    })
+
+    return ret
   },
 
   /**
