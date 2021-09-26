@@ -143,6 +143,8 @@ TurndownService.prototype = {
       replaceSpaceToMarkdownSafeSpace(node)
       var output = process.call(this, node)
       ret = postProcess.call(this, output)
+      // replace middle space char to white space
+      ret = ret.replace(/(?!^)\u2003/gm, ' ')
     })
 
     return ret
