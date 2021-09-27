@@ -31,7 +31,7 @@ function isFirstTextNode (node) {
   //
   if (parent.tagName === 'SPAN' || parent.tagName === 'CODE') return false
   //
-  if (elem.tagName === 'SPAN' || elem.tagName === 'CODE') {
+  if (elem.tagName === 'SPAN' || elem.tagName === 'CODE' || elem.id === 'turndown-root') {
     //
     const prev = elem.previousSibling
     if (!prev) return true
