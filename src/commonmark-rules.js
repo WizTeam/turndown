@@ -66,6 +66,9 @@ rules.listItem = {
     if (content.replace(/^\n+/, '').indexOf('\n') !== -1) {
       const lines = content.replace(/^\n+/, '').split('\n')
       lines[0] = rules.listItem.replacement(lines[0], node, options)
+      if (lines[0].endsWith('\n')) {
+        lines[0] = lines[0].substr(0, lines[0].length - 1)
+      }
       return lines.join('\n')
     }
 
@@ -78,7 +81,7 @@ rules.listItem = {
     if (parent.nodeName === 'OL') {
       var start = parent.getAttribute('start')
       var index = Array.prototype.indexOf.call(parent.children, node)
-      prefix = (start ? Number(start) + index : index + 1) + '.  '
+      prefix = (start ? Number(start) + index : index + 1) + '. '
     }
     return (
       prefix + content + (node.nextSibling && !/\n$/.test(content) ? '\n' : '')
