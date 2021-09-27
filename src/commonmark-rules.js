@@ -63,8 +63,10 @@ rules.listItem = {
 
   replacement: function (content, node, options) {
     // disable multi-lines list item
-    if (content.indexOf('\n') !== -1) {
-      return content
+    if (content.replace(/^\n+/, '').indexOf('\n') !== -1) {
+      const lines = content.replace(/^\n+/, '').split('\n')
+      lines[0] = rules.listItem.replacement(lines[0], node, options)
+      return lines.join('\n')
     }
 
     content = content
