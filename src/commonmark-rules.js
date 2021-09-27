@@ -62,11 +62,16 @@ rules.listItem = {
   filter: 'li',
 
   replacement: function (content, node, options) {
+    // disable multi-lines list item
+    if (content.indexOf('\n') !== -1) {
+      return content
+    }
+
     content = content
       .replace(/^\n+/, '') // remove leading newlines
       .replace(/\n+$/, '\n') // replace trailing newlines with just a single one
       .replace(/\n/gm, '\n    ') // indent
-    var prefix = options.bulletListMarker + '   '
+    var prefix = options.bulletListMarker + ' '
     var parent = node.parentNode
     if (parent.nodeName === 'OL') {
       var start = parent.getAttribute('start')
