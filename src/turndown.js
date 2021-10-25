@@ -7,6 +7,7 @@ var reduce = Array.prototype.reduce
 var escapes = [
   [/\\/g, '\\\\'],
   [/\*/g, '\\*'],
+  [/\$/g, '\\$'],
   [/^-/g, '\\-'],
   [/^\+ /g, '\\+ '],
   [/^(=+)/g, '\\$1'],
