@@ -165,6 +165,7 @@ rules.inlineLink = {
     var href = node.getAttribute('href')
     var title = cleanAttribute(node.getAttribute('title'))
     if (title) title = ' "' + title + '"'
+    content = content.replace(/\n/g, '')
     return '[' + content + '](' + href + title + ')'
   }
 }
